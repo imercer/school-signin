@@ -31,7 +31,7 @@
    	  <div style="width: 20%;margin:auto;">
             <form action="api/process.php" method="get" id="initialform">
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <textarea class="mdl-textfield__input" type="text" rows= "3" id="reasonfield" ></textarea>
+                <textarea class="mdl-textfield__input" type="text" rows= "3" id="reasonfield" name="justification"></textarea>
 			    <label class="mdl-textfield__label" for="reasonfield">Justification.</label>
               </div>
             </form>

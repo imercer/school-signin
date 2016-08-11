@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- Copyright Isaac Mercer 2016
+-->
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="css/material.min.css">
+<meta http-equiv="refresh" content="5;url=index.html">
+<script defer src="js/material.min.js"></script>
+<meta charset="utf-8">
+<title>School Signin</title>
+</head>
+<body>
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Glendowie College Sign In</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <div id="time"></div>
+      <!-- Navigation. We hide it in small screens. -->
+    </div>
+  </header>
+  <main class="mdl-layout__content">
+    <div class="page-content" style="text-align:center"> 
+          <h3>Please take your slip from below and head to class.</h3>
+            <h5>Further information (such as a note) may be requested from Mrs Huka or your form teacher.</h5>
+        </div>
+	</div>
+  </main>
+</div>
+<script type="application/javascript">
+setInterval(function(){
+  	var date = new Date();
+	var n = date.toDateString();
+	var time = date.toLocaleTimeString();
+	
+	document.getElementById('time').innerHTML = n + ' ' + time;
+}, 1000);
+</script>
+</body>
+</html>
