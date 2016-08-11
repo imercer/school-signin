@@ -28,7 +28,7 @@
           <h3 style="text-align:center">Please scan your ID card using the scanner below, or enter your ID number manually</h3>
 
    	  <div style="width: 20%;margin:auto;">
-            <form action="api/getstudentbyid.php" method="get">
+            <form action="api/getstudentbyid.php" method="get" id="initialform">
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" maxlength="5" minlength="5" id="idfield" autofocus name="idnumber">
                 <label class="mdl-textfield__label" for="idfield">ID Number</label>
@@ -47,7 +47,8 @@
               <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 9; document.getElementById('idfield').focus()">9</button></div>
               <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value.slice(0, -1); document.getElementById('idfield').focus()"><i class="material-icons">backspace</i></button></div>
               <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 0; document.getElementById('idfield').focus()">0</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect"><i class="material-icons">keyboard_return</i></button></div>
+              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('initialform').submit();
+"><i class="material-icons">keyboard_return</i></button></div>
             </div>
             
         </div>
