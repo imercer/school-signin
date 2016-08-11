@@ -53,7 +53,7 @@ if (($currentTime - $lastlate) < 1209600) {
 	shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr");
 	echo "echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr";
 	session_unset();
-	/*echo "<script>window.location.href='../actionrequired.html'</script>";*/
+	echo "<script>window.location.href='../actionrequired.html'</script>";
 } else {
 	// Create connection
 		$conn = new mysqli($servername, $username, $password, $dbname);
