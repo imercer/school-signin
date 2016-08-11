@@ -25,6 +25,7 @@ if ($result->num_rows > 0) {
 		$_SESSION['firstname'] = $row["firstname"];
 		$_SESSION['familyname'] = $row["familyname"];
 		$_SESSION['form'] = $row["formclass"];
+		$_SESSION['lastlate'] = $row["lastLate"];
 	    echo "<script>window.location.href='../justification.php'</script>";
     }
 } else {
