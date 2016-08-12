@@ -7,9 +7,11 @@ $timeoffset = date_offset_get($timestatus);
 if ($timeoffset == 43200) {
 	$startTime = mktime(20,40,0);
 	$wedstartTime = mktime(21,45,0);
+	$endtime = mktime(3,20,00);
 } elseif ($timeoffset == 46800) {
 	$startTime = mktime(21,40,0);
 	$wedstartTime = mktime(22,45,0);
+	$endtime = mktime(4,20,00);
 }
 echo "<script>console.log('$timeoffset')</script>";
 //Initialise Variables
@@ -26,8 +28,9 @@ if ($weekday == 2 ) {
 	$startTime = $wedstartTime;	
 }
 $test = $currentTime - $startTime;
+$testtwo = $currentTime - $endtime;
 echo "<script>console.log('$startTime')</script>";
-echo "<script>console.log('$test')</script>";
+echo "<script>console.log('$test $testtwo')</script>";
 // Clear previous late log
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -86,7 +89,7 @@ if (($currentTime - $lastlate) < 1209600) {
 		// Redirect
 		$_SESSION = array();
 		echo "<script>window.location.href='../actionrequired.html'</script>";
-} else if (($currentTime - $startTime) > 1800) {
+} else if (($currentTime - $startTime) > 1800 || ($currentTime - $endtime) < 15600) {
 		// Add late arrival to SQL table
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		// Check connection
