@@ -1,10 +1,10 @@
 <?php
 session_start();
 $idnumber = $_GET['idnumber'];
-$servername = "localhost";
-$username = "school-signin";
+$servername = "isaacmercer.nz";
+$username = "gdcschool-signin";
 $password = "uJSZPJRZF8EfG6WX";
-$dbname = "gdc-signin";
+$dbname = "gdcschool-signin";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

@@ -18,10 +18,10 @@ echo "<script>console.log('$timeoffset')</script>";
 $justification = $_GET['justification'];
 $studentID = $_SESSION['studentid'];
 $currentTime = time();
-$servername = "localhost";
-$username = "school-signin";
+$servername = "isaacmercer.nz";
+$username = "gdcschool-signin";
 $password = "uJSZPJRZF8EfG6WX";
-$dbname = "gdc-signin";
+$dbname = "gdcschool-signin";
 $weekday = date('w');
 
 if ($weekday == 2 ) {
