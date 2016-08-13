@@ -1,49 +1,65 @@
 <?php
 session_start();
-$idnumber = $_GET['idnumber'];
-$servername = "isaacmercer.nz";
-$username = "gdcschool-signin";
-$password = "uJSZPJRZF8EfG6WX";
-$dbname = "gdcschool-signin";
+/* 	api/getstudentbyid.php
+	Get the student's details by using their ID number 
+	Gets the row from student-names database which matches the ID number requested and then gets the timestamp of the student's last late arrival. These details are then saved to session for future use.
+	
+	
+	Copyright Isaac Mercer 2016
+	All Rights Reserved
+*/
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
+// Initialise Variables
+	$idnumber = $_GET['idnumber'];
+	$servername = "isaacmercer.nz";
+	$username = "gdcschool-signin";
+	$password = "uJSZPJRZF8EfG6WX";
+	$dbname = "gdcschool-signin";
 
-$sql = "SELECT * FROM `student-names` WHERE studentid=$idnumber";
+// Begin Database Connection
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	} 
 
-$result = $conn->query($sql);
+// Establish Database Request to obtain student details by ID number
+	$sql = "SELECT * FROM `student-names` WHERE studentid=$idnumber";
+	$result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "id: " . $row["studentid"]. " - Name: " . $row["firstname"]. " " . $row["familyname"]. "<br>";
-		$_SESSION['studentid'] = $row["studentid"];
-		$_SESSION['firstname'] = $row["firstname"];
-		$_SESSION['familyname'] = $row["familyname"];
-		$_SESSION['form'] = $row["formclass"];
-    }
-} else {
-    echo "<script>window.location.href='../index.html'</script>";
-}
+// Process Result
+	if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			// Set database data as persistent variables
+				$_SESSION['studentid'] = $row["studentid"];
+				$_SESSION['firstname'] = $row["firstname"];
+				$_SESSION['familyname'] = $row["familyname"];
+				$_SESSION['form'] = $row["formclass"];
+		}
+	} else {
+		//Send user back to home if no data is found
+		//TODO: Error/info prompt to display
+			echo "<script>window.location.href='../index.html'</script>";
+	}
 
-$sql = "SELECT * FROM `lastlate` WHERE studentid=$idnumber";
+// Establish Database Request to obtain student's last late timestamp by ID number
+	$sql = "SELECT * FROM `lastlate` WHERE studentid=$idnumber";
+	$result = $conn->query($sql);
 
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-		$_SESSION['lastlate'] = $row["lastlate"];
-	    echo "<script>window.location.href='../justification.php'</script>";
-    }
-} else {
-		$_SESSION['lastlate'] = 0;
-	    echo "<script>window.location.href='../justification.php'</script>";
-}
-$conn->close();
+// Process Result
+	if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			// Set database result as persistent variable
+				$_SESSION['lastlate'] = $row["lastlate"];
+			//Redirect to next page
+				echo "<script>window.location.href='../justification.php'</script>";
+		}
+	} else {
+			// Set 0 as the lastlate timestamp if no database record found
+				$_SESSION['lastlate'] = 0;
+			// Redirect to next page
+				echo "<script>window.location.href='../justification.php'</script>";
+	}
+// Close database connection
+	$conn->close();	
 
 ?>

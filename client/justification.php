@@ -1,6 +1,11 @@
 <?php session_start();?>
 <!doctype html>
-<!-- Copyright Isaac Mercer 2016
+<!-- justification.php
+	Justification Pending
+	This page provides a field entry to allow the user to submit their justification for late arrival using a on-screen keyboard.
+	
+	Copyright Isaac Mercer 2016
+	All Rights Reserved
 -->
 <html>
 <head>
@@ -12,16 +17,12 @@
 <title>School Signin</title>
 </head>
 <body>
-<!-- Always shows a header, even in smaller screens. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <!-- Title -->
       <span class="mdl-layout-title">Glendowie College Sign In</span>
-      <!-- Add spacer, to align navigation to the right -->
       <div class="mdl-layout-spacer"></div>
       <div id="time"></div>
-      <!-- Navigation. We hide it in small screens. -->
     </div>
   </header>
   <main class="mdl-layout__content">

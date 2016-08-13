@@ -1,138 +1,160 @@
 <?php
 session_start();
+/* 	api/process.php
+	Updates the database and prints late slip after sign-in 
+	Registers the late arrival time against the student's name then adds a record to the database with the justification and full late arrival and student details. Additionally this script calculates whether further action should be required (more than 30 minutes late or late twice in 2 weeks). Finishes by executing a print job with the late slip details.
+	
+	
+	Copyright Isaac Mercer 2016
+	All Rights Reserved
+*/
 
-date_default_timezone_set('UTC');
-$timestatus = date_create("now", timezone_open('Pacific/Auckland'));
-$timeoffset = date_offset_get($timestatus);
-if ($timeoffset == 43200) {
-	$startTime = mktime(20,40,0);
-	$wedstartTime = mktime(21,45,0);
-	$endtime = mktime(3,20,00);
-} elseif ($timeoffset == 46800) {
-	$startTime = mktime(21,40,0);
-	$wedstartTime = mktime(22,45,0);
-	$endtime = mktime(4,20,00);
-}
-echo "<script>console.log('$timeoffset')</script>";
+// Sets default time zone and calculates times in relation to NZST/NZDT
+	date_default_timezone_set('UTC');
+	$timestatus = date_create("now", timezone_open('Pacific/Auckland'));
+	$timeoffset = date_offset_get($timestatus);
+	if ($timeoffset == 43200) { 			// If NZ daylight saving is false
+		$startTime = mktime(20,40,0);	 		// Set school start time to 20:40UTC 8:40NZST
+		$wedstartTime = mktime(21,45,0);	 	// Set wednesday start time to 21:45UTC 9:45NZST
+		$endtime = mktime(3,20,00); 			// Set end of day to 3:20UTC 15:20NZST
+	} elseif ($timeoffset == 46800) {		// If NZ daylight saving is true
+		$startTime = mktime(21,40,0);			// Set school start time to 21:40UTC 8:40NZDT
+		$wedstartTime = mktime(22,45,0);		// Set wednesday start time to 22:45UTC 9:45NZDT
+		$endtime = mktime(4,20,00);				// Set end of day to 4:20UTC 15:20NZDT
+	}
+	
+	echo "<script>console.log('$timeoffset')</script>";
+	
 //Initialise Variables
-$justification = $_GET['justification'];
-$studentID = $_SESSION['studentid'];
-$currentTime = time();
-$servername = "isaacmercer.nz";
-$username = "gdcschool-signin";
-$password = "uJSZPJRZF8EfG6WX";
-$dbname = "gdcschool-signin";
-$weekday = date('w');
+	$justification = $_GET['justification'];
+	$studentID = $_SESSION['studentid'];
+	$currentTime = time();
+	$servername = "isaacmercer.nz";
+	$username = "gdcschool-signin";
+	$password = "uJSZPJRZF8EfG6WX";
+	$dbname = "gdcschool-signin";
+	$weekday = date('w');
 
-if ($weekday == 2 ) {
-	$startTime = $wedstartTime;	
-}
-$test = $currentTime - $startTime;
-$testtwo = $currentTime - $endtime;
-echo "<script>console.log('$startTime')</script>";
-echo "<script>console.log('$test $testtwo')</script>";
-// Clear previous late log
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $dbname);
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	} 
+	if ($weekday == 2 ) {			// If morning is Tuesday UTC / Wednesday NZST/NZDT
+		$startTime = $wedstartTime;		// Set start time to Wednesday Start Time
+	}
 	
-	$sql = "DELETE FROM `lastlate` WHERE studentid=$studentID";
+// Clear student's previous last late
+	// Begin Database connection
+		$conn = new mysqli($servername, $username, $password, $dbname);
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		} 
 	
-	if ($conn->query($sql) === TRUE) {
+	// Establish Database Request to delete last late row where studentid matches the current student's ID number
+		$sql = "DELETE FROM `lastlate` WHERE studentid=$studentID";
+	
+	if ($conn->query($sql) === TRUE) {	// Was result sucsessful
 		echo "Deleted the last late record for $studentID";
 	} else {
 		echo "Unable to delete the last late record for $studentID: " . $conn->error;
 	}
 	
-	$sql = "INSERT INTO `lastlate` (studentid, lastlate)
-		VALUES ('$studentID', '$currentTime')";
+	// Establish Database Request to insert a new last late row with the current time and student id 
+		$sql = "INSERT INTO `lastlate` (studentid, lastlate)
+			VALUES ('$studentID', '$currentTime')";
 	
 	if ($conn->query($sql) === TRUE) {
 		echo "Added lastLate record for $studentID";
 	} else {
 		echo "Error adding lastLate record for $studentID " . $conn->error;
 	}
-	$conn->close();
+	
+	$conn->close(); // Close connection
 
+//Initialise Variables from Session
+	$firstname = $_SESSION['firstname'];
+	$familyname = $_SESSION['familyname'];
+	$lastlate = $_SESSION['lastlate'];
+	$form = $_SESSION['form'];
+	
+$time = date_format($timestatus, 'D d/m/Y - g:i:sa'); // Create human readable date
+echo $currentTime - $lastlate; // Calculate seconds since student's last late arrival
 
-$firstname = $_SESSION['firstname'];
-$familyname = $_SESSION['familyname'];
-$lastlate = $_SESSION['lastlate'];
-$form = $_SESSION['form'];
-$time = date_format($timestatus, 'D d/m/Y - g:i:sa');
-echo $currentTime - $lastlate;
-//Connect to SQL Database
-if (($currentTime - $lastlate) < 1209600) {
-		$lastlate = date('d/m/Y', $lastlate);
-		// Add late arrival to SQL table
-		$conn = new mysqli($servername, $username, $password, $dbname);
-		// Check connection
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		} 
-		$sql = "INSERT INTO `latearrivalstoday` (studentid, firstname, lastname, arrivedat, justification, furtheractionreq, furtheractiontrigger)
-		VALUES ('$studentID', '$firstname', '$familyname' , '$time', '$justification', '1', 'Last late within last 2 weeks: $lastlate')";
-		
-		if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
-		}
-		
-		$conn->close();
-		//Print Slip
-		shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr");
-		echo "echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr";
-		// Redirect
-		$_SESSION = array();
-		echo "<script>window.location.href='../actionrequired.html'</script>";
-} else if (($currentTime - $startTime) > 1800 || ($currentTime - $endtime) < 0) {
-		// Add late arrival to SQL table
-		$conn = new mysqli($servername, $username, $password, $dbname);
-		// Check connection
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		} 
-		$sql = "INSERT INTO `latearrivalstoday` (studentid, firstname, lastname, arrivedat, justification, furtheractionreq, furtheractiontrigger)
-		VALUES ('$studentID', '$firstname', '$familyname' , '$time', '$justification', '1', 'More than 30 minutes late, signed in at: $time')";
-		
-		if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
-		}
-		
-		$conn->close();
-		//Print Slip
-		shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \n' | lpr");
-		echo "echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \n' | lpr";
-		// Redirect
-		$_SESSION = array();
-		echo "<script>window.location.href='../actionrequired.html'</script>";
-} else {
-		$conn = new mysqli($servername, $username, $password, $dbname);
-		// Check connection
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		} 
-		// Add late arrival to SQL table
-		$sql = "INSERT INTO `latearrivalstoday` (studentid, firstname, lastname, arrivedat, justification, furtheractionreq, furtheractiontrigger)
-		VALUES ('$studentID', '$firstname', '$familyname' , '$time', '$justification', '0', '')";
-		
-		if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
-		}
-		
-		$conn->close();
-		// Print Slip
-		shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nsuccessfully signed in, no further action required \n\n\n' | lpr");
-		// Redirect
-		$_SESSION = array();
-		echo "<script>window.location.href='../finished.html'</script>";
-}
+// Record late arrival details in database and print late slip
+	if (($currentTime - $lastlate) < 1209600) { 	//Have there been more than 2 weeks since last late arrival
+			$lastlate = date('d/m/Y', $lastlate);	
+
+			//Begin database connection
+				$conn = new mysqli($servername, $username, $password, $dbname);
+				if ($conn->connect_error) {
+					die("Connection failed: " . $conn->connect_error);
+				} 
+				
+			// Establish Database request to insert the student's id number, name, arrival time, justification and further action details into today's late arrivals database
+				$sql = "INSERT INTO `latearrivalstoday` (studentid, firstname, lastname, arrivedat, justification, furtheractionreq, furtheractiontrigger)
+				VALUES ('$studentID', '$firstname', '$familyname' , '$time', '$justification', '1', 'Last late within last 2 weeks: $lastlate')";
+				
+			if ($conn->query($sql) === TRUE) {
+				echo "New record created successfully";
+			} else {
+				echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			
+			$conn->close(); // Close connection
+			
+			// Print late arrival slip
+				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr");
+
+			// Redirect
+				$_SESSION = array(); // Empty session values
+				echo "<script>window.location.href='../actionrequired.html'</script>";
+				
+	} else if (($currentTime - $startTime) > 1800 || ($currentTime - $endtime) < 0) { // Has the student signed in between 9:10/10:15 and 3:30
+			//Begin database connection
+				$conn = new mysqli($servername, $username, $password, $dbname);
+				if ($conn->connect_error) {
+					die("Connection failed: " . $conn->connect_error);
+				} 
+			
+			// Establish Database request to insert the student's id number, name, arrival time, justification and further action details into today's late arrivals database
+				$sql = "INSERT INTO `latearrivalstoday` (studentid, firstname, lastname, arrivedat, justification, furtheractionreq, furtheractiontrigger)
+				VALUES ('$studentID', '$firstname', '$familyname' , '$time', '$justification', '1', 'More than 30 minutes late, signed in at: $time')";
+				
+			if ($conn->query($sql) === TRUE) {
+				echo "New record created successfully";
+			} else {
+				echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			
+			$conn->close(); // Close conenction
+			
+			// Print late arrival slip
+				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \n' | lpr");
+				
+			// Redirect
+				$_SESSION = array(); // Empty session values
+				echo "<script>window.location.href='../actionrequired.html'</script>";
+				
+	} else {	// Normal sign in, no further action required
+			/// Begin database connection
+				$conn = new mysqli($servername, $username, $password, $dbname);
+				if ($conn->connect_error) {
+					die("Connection failed: " . $conn->connect_error);
+				} 
+				
+			// Establish Database request to insert the student's id number, name, arrival time, justification into today's late arrivals database
+				$sql = "INSERT INTO `latearrivalstoday` (studentid, firstname, lastname, arrivedat, justification, furtheractionreq, furtheractiontrigger)
+				VALUES ('$studentID', '$firstname', '$familyname' , '$time', '$justification', '0', '')";
+				
+			if ($conn->query($sql) === TRUE) {
+				echo "New record created successfully";
+			} else {
+				echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			
+			$conn->close(); // Close connection
+			
+			// Print late arrival slip
+				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nsuccessfully signed in, no further action required \n\n\n' | lpr");
+	
+			// Redirect
+				$_SESSION = array(); // Empty session values
+				echo "<script>window.location.href='../finished.html'</script>";
+	}
 ?>
