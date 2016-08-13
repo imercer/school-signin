@@ -62,7 +62,7 @@ $firstname = $_SESSION['firstname'];
 $familyname = $_SESSION['familyname'];
 $lastlate = $_SESSION['lastlate'];
 $form = $_SESSION['form'];
-$time = date('d/m/Y H:i:s');
+$time = date_format($timestatus, 'D d/m/Y - g:i:sa');
 echo $currentTime - $lastlate;
 //Connect to SQL Database
 if (($currentTime - $lastlate) < 1209600) {
@@ -89,7 +89,7 @@ if (($currentTime - $lastlate) < 1209600) {
 		// Redirect
 		$_SESSION = array();
 		echo "<script>window.location.href='../actionrequired.html'</script>";
-} else if (($currentTime - $startTime) > 1800 || ($currentTime - $endtime) < 15600) {
+} else if (($currentTime - $startTime) > 1800 || ($currentTime - $endtime) < 0) {
 		// Add late arrival to SQL table
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		// Check connection
