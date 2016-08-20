@@ -15,7 +15,11 @@ session_start();
 	$username = "gdcschool-signin";
 	$password = "uJSZPJRZF8EfG6WX";
 	$dbname = "gdcschool-signin";
-
+	
+//Check that the submission is a valid ID number
+	if (strlen($idnumber) != 5){ 		//If variable justification does not equal 5 chars
+		exit('<script>window.location.href="../index.html?error=length"</script>'); //Get user to try again
+	} 
 // Begin Database Connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
 	if ($conn->connect_error) {
@@ -37,8 +41,7 @@ session_start();
 		}
 	} else {
 		//Send user back to home if no data is found
-		//TODO: Error/info prompt to display
-			echo "<script>window.location.href='../index.html'</script>";
+			echo "<script>window.location.href='../index.html?error=notfound'</script>";
 	}
 
 // Establish Database Request to obtain student's last late timestamp by ID number

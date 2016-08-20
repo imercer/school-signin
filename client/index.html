@@ -8,6 +8,37 @@
 -->
 <html>
 <head>
+<style>
+#nopad1 {
+	padding: 0px; !important
+	
+}
+#nopad2 {
+	padding: 0px; !important
+	
+}
+#nopad3 {
+	padding: 0px; !important
+	
+}
+#nopad4 {
+	padding: 0px; !important
+	
+}
+
+#loadingoverlay {
+	width: 100%;
+	height: 100%;
+	z-index: 55;
+	position:absolute;
+	left:0;
+	top:0;
+	right: 0;
+	bottom: 0;	
+	background-color: #fff;
+	display: none;
+	text-align:center;
+}</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="css/material.min.css">
 
@@ -16,47 +47,67 @@
 <title>School Signin</title>
 </head>
 <body>
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  <header class="mdl-layout__header">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header"> 
+<!--<header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <span class="mdl-layout-title">Glendowie College Sign In</span>
       <div class="mdl-layout-spacer"></div>
       <div id="time"></div>
     </div>
-  </header>
-  <main class="mdl-layout__content">
+  </header>-->
+<main class="mdl-layout__content">
     <div class="page-content" > 
-          <h3 style="text-align:center">Please scan your ID card using the scanner below, or enter your ID number manually</h3>
-
-   	  <div style="width: 20%;margin:auto;">
-            <form action="api/getstudentbyid.php" method="get" id="initialform">
+          <h4 style="text-align:center">Please scan your ID card or enter your ID number to sign in</h4>
+          <div style="text-align:center; display: none" id="errormsg">
+			<i style="color: red; text-align: center;">Please enter a valid ID number and try again</i></div>
+   	  <div style="width: 50%;margin:auto;">
+            <form action="api/getstudentbyid.php" method="get" id="initialform" onSubmit="document.getElementById('loadingoverlay').style.display = 'block';">
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" maxlength="5" minlength="5" id="idfield" autofocus name="idnumber">
                 <label class="mdl-textfield__label" for="idfield">ID Number</label>
                 <span class="mdl-textfield__error">This is not a valid ID number</span>
               </div>
             </form>
-            <div class="mdl-grid">
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 1; document.getElementById('idfield').focus()">1</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 2; document.getElementById('idfield').focus()">2</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 3; document.getElementById('idfield').focus()">3</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 4; document.getElementById('idfield').focus()">4</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 5; document.getElementById('idfield').focus()">5</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 6; document.getElementById('idfield').focus()">6</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 7; document.getElementById('idfield').focus()">7</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 8; document.getElementById('idfield').focus()">8</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 9; document.getElementById('idfield').focus()">9</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value.slice(0, -1); document.getElementById('idfield').focus()"><i class="material-icons">backspace</i></button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 0; document.getElementById('idfield').focus()">0</button></div>
-              <div class="mdl-cell mdl-cell--4-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('initialform').submit();
+            <div class="mdl-grid" id="nopad1">
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 1; document.getElementById('idfield').focus()">1</button></div>
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 2; document.getElementById('idfield').focus()">2</button></div>
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 3; document.getElementById('idfield').focus()">3</button></div>
+             </div><div class="mdl-grid" id="nopad2">
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 4; document.getElementById('idfield').focus()">4</button></div>
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 5; document.getElementById('idfield').focus()">5</button></div>
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 6; document.getElementById('idfield').focus()">6</button></div>
+              </div><div class="mdl-grid" id="nopad3">
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 7; document.getElementById('idfield').focus()">7</button></div>
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 8; document.getElementById('idfield').focus()">8</button></div>
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 9; document.getElementById('idfield').focus()">9</button></div>
+              </div><div class="mdl-grid" id="nopad4">
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value.slice(0, -1); document.getElementById('idfield').focus()"><i class="material-icons">backspace</i></button></div>
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('idfield').value = document.getElementById('idfield').value + 0; document.getElementById('idfield').focus()">0</button></div>
+              <div class="mdl-cell mdl-cell--2-col"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onClick="document.getElementById('initialform').submit();
 "><i class="material-icons">keyboard_return</i></button></div>
             </div>
-            
         </div>
 	</div>
+    <div id="loadingoverlay">
+    	<div style="padding: 25px">
+    		<div class="mdl-spinner mdl-js-spinner is-active" style="width:300px; height: 300px;"></div>
+        </div>
+    </div>
   </main>
 </div>
-<script type="application/javascript">
+<script>
+	var field = 'error';
+	var url = window.location.href;
+	if(url.indexOf('?' + field + '=') != -1) {
+		document.getElementById('errormsg').style.display = 'block';
+	} else if(url.indexOf('&' + field + '=') != -1) {
+		document.getElementById('loadingoverlay').style.display = 'block';
+	} else  {
+		console.log('fail');
+	};
+		
+</script>
+<!--<script type="application/javascript">
 setInterval(function(){
   	var date = new Date();
 	var n = date.toDateString();
@@ -64,6 +115,6 @@ setInterval(function(){
 	
 	document.getElementById('time').innerHTML = n + ' ' + time;
 }, 1000);
-</script>
+</script>-->
 </body>
 </html>

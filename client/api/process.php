@@ -38,6 +38,15 @@ session_start();
 	if ($weekday == 2 ) {			// If morning is Tuesday UTC / Wednesday NZST/NZDT
 		$startTime = $wedstartTime;		// Set start time to Wednesday Start Time
 	}
+
+//Check that submission hasn't come from barcode scanner
+	if(1 === preg_match('~[0-9]~', $justification)){   //If variable justification contains numbers
+		exit('<script>window.location.href="../justification.php?error=numbers"</script>'); //Get user to try again
+	}
+//Check that the submission is a valid string
+	if (strlen($justification) < 5){ 				  //If variable justification is less than 5 chars
+		exit('<script>window.location.href="../justification.php?error=length"</script>'); //Get user to try again
+	} 
 	
 // Clear student's previous last late
 	// Begin Database connection
