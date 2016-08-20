@@ -87,7 +87,7 @@
   <div class="mdl-cell mdl-cell--1-col" id="zeropad"><button class="mdl-button mdl-js-button mdl-button--raised"  onClick="document.getElementById('reasonfield').value = document.getElementById('reasonfield').value + 'k'; document.getElementById('reasonfield').focus()">K</button></div>
   <div class="mdl-cell mdl-cell--1-col" id="zeropad"><button class="mdl-button mdl-js-button mdl-button--raised"  onClick="document.getElementById('reasonfield').value = document.getElementById('reasonfield').value + 'l'; document.getElementById('reasonfield').focus()">L</button></div>
   <div class="mdl-cell mdl-cell--1-col" id="zeropad"></div>
-  <div class="mdl-cell mdl-cell--1-col" id="zeropad"><button class="mdl-button mdl-js-button mdl-button--raised"  onClick="document.getElementById('initialform').submit();
+  <div class="mdl-cell mdl-cell--1-col" id="zeropad"><button class="mdl-button mdl-js-button mdl-button--raised"  onClick="document.getElementById('loadingoverlay').style.display = 'block'; document.getElementById('initialform').submit();
 "><i class="material-icons">keyboard_return</i></button></div>
 </div>
  <div class="mdl-grid" style="text-align:center">
