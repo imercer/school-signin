@@ -10,7 +10,7 @@
 
 //CONFIG **EDIT THIS** -----------------------------------------------------------------
 
-$attendanceofficeremail = "isaac@isaacscomputertips.com";
+$attendanceofficeremail = "14057@gdc.school.nz";
 
 //DO NOT EDIT BELOW THIS LINE ----------------------------------------------------------
 
@@ -44,8 +44,9 @@ $attendanceofficeremail = "isaac@isaacscomputertips.com";
 				$record .= "<b>id: </b>" . $row["studentid"]. "<b> Name: </b>" . $row["firstname"]. " " . $row["lastname"]. "<b> Arrived At: </b>" . $row["arrivedat"] . "<b> Justification: </b>" . $row["justification"];
 			// If further action was required then also add those details and the reason for the trigger
 				if ($furtheraction == 1) {
-						$record .= " <b>Further action was required " . $row["furtheractiontrigger"] . "</b><br>";
+						$record .= " <b>Further action was required " . $row["furtheractiontrigger"] . "</b>";
 				}
+				$record .= "<br><br>";
 		}
 	} else {
 		$record .= "<i><h3>There were not late arrivals today</h3></i>";	// Add no late arrivals to the email if there were no late arrivals on that paticular day
