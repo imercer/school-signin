@@ -14,12 +14,12 @@ session_start();
 	$timestatus = date_create("now", timezone_open('Pacific/Auckland'));
 	$timeoffset = date_offset_get($timestatus);
 	if ($timeoffset == 43200) { 			// If NZ daylight saving is false
-		$startTime = mktime(20,40,0);	 		// Set school start time to 20:40UTC 8:40NZST
-		$wedstartTime = mktime(21,45,0);	 	// Set wednesday start time to 21:45UTC 9:45NZST
+		$startTime = mktime(20,45,0);	 		// Set school start time to 20:45UTC 8:45NZST
+		$wedstartTime = mktime(21,50,0);	 	// Set wednesday start time to 21:50UTC 9:50NZST
 		$endtime = mktime(3,20,00); 			// Set end of day to 3:20UTC 15:20NZST
 	} elseif ($timeoffset == 46800) {		// If NZ daylight saving is true
-		$startTime = mktime(21,40,0);			// Set school start time to 21:40UTC 8:40NZDT
-		$wedstartTime = mktime(22,45,0);		// Set wednesday start time to 22:45UTC 9:45NZDT
+		$startTime = mktime(21,45,0);			// Set school start time to 21:45UTC 8:45NZDT
+		$wedstartTime = mktime(22,50,0);		// Set wednesday start time to 22:50UTC 9:50NZDT
 		$endtime = mktime(4,20,00);				// Set end of day to 4:20UTC 15:20NZDT
 	}
 	
@@ -114,7 +114,7 @@ echo $currentTime - $lastlate; // Calculate seconds since student's last late ar
 				$_SESSION = array(); // Empty session values
 				echo "<script>window.location.href='../actionrequired.html'</script>";
 				
-	} else if (($currentTime - $startTime) > 1800 || ($currentTime - $endtime) < 0) { // Has the student signed in between 9:10/10:15 and 3:30
+	} else if (($currentTime - $startTime) > 1800 || ($currentTime - $endtime) < 0) { // Has the student signed in between 9:15/10:20 and 3:30
 			//Begin database connection
 				$conn = new mysqli($servername, $username, $password, $dbname);
 				if ($conn->connect_error) {
