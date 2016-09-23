@@ -108,7 +108,7 @@ echo $currentTime - $lastlate; // Calculate seconds since student's last late ar
 			$conn->close(); // Close connection
 			
 			// Print late arrival slip
-				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr");
+				shell_exec("echo '\033[01;1mName:\033[01;1m \n$firstname $familyname \n\033[01;1mForm Class:\033[01;1m\n $form \n\033[01;1mTime Signed In:\033[01;1m\n $time \n\033[01;1mJustification:\033[01;1m\n $justification \n\033[01;1mLast Late Arrival:\033[01;1m\n $lastlate \nRequires futher action. Please get a DP or attendance officer to sign below \n\n\n\n\n\n\n\n' | aha | wkhtmltopdf  - - | lpr");
 
 			// Redirect
 				$_SESSION = array(); // Empty session values
@@ -134,7 +134,7 @@ echo $currentTime - $lastlate; // Calculate seconds since student's last late ar
 			$conn->close(); // Close conenction
 			
 			// Print late arrival slip
-				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \n' | lpr");
+				shell_exec("echo '\033[01;1mName:\033[01;1m \n$firstname $familyname \n\033[01;1mForm Class:\033[01;1m\n $form \n\033[01;1mTime Signed In:\033[01;1m\n $time \n\033[01;1mJustification:\033[01;1m\n $justification \nRequires futher action. Please get a DP or attendance officer to sign below \n\n\n\n\n\n\n\n'  | aha | wkhtmltopdf  - - | lpr");
 				
 			// Redirect
 				$_SESSION = array(); // Empty session values
@@ -160,7 +160,7 @@ echo $currentTime - $lastlate; // Calculate seconds since student's last late ar
 			$conn->close(); // Close connection
 			
 			// Print late arrival slip
-				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nsuccessfully signed in, no further action required \n\n\n' | lpr");
+				shell_exec("echo '\033[01;1mName:\033[01;1m \n$firstname $familyname \n\033[01;1mForm Class:\033[01;1m\n $form \n\033[01;1mTime Signed In:\033[01;1m\n $time \n\033[01;1mJustification:\033[01;1m\n $justification \nsuccessfully signed in, no further action required \n\n\n\n\n\n\n\n'  | aha | wkhtmltopdf  - - | lpr");
 	
 			// Redirect
 				$_SESSION = array(); // Empty session values
