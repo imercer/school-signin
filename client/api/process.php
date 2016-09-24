@@ -108,7 +108,8 @@ echo $currentTime - $lastlate; // Calculate seconds since student's last late ar
 			$conn->close(); // Close connection
 			
 			// Print late arrival slip
-				shell_exec("lpr -o fit-to-page /home/pi/lateslip.png && echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr");
+				//shell_exec("lpr -o fit-to-page /home/pi/lateslip.png && echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr");
+				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nLast Late Arrival: $lastlate \n\n\n' | lpr");
 			// Redirect
 				$_SESSION = array(); // Empty session values
 				echo "<script>window.location.href='../actionrequired.html'</script>";
@@ -133,8 +134,8 @@ echo $currentTime - $lastlate; // Calculate seconds since student's last late ar
 			$conn->close(); // Close conenction
 			
 			// Print late arrival slip
-				shell_exec("lpr -o fit-to-page /home/pi/lateslip.png && echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \n' | lpr");
-
+				//shell_exec("lpr -o fit-to-page /home/pi/lateslip.png && echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \n' | lpr");
+				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \n' | lpr");
 			// Redirect
 				$_SESSION = array(); // Empty session values
 				echo "<script>window.location.href='../actionrequired.html'</script>";
@@ -159,8 +160,8 @@ echo $currentTime - $lastlate; // Calculate seconds since student's last late ar
 			$conn->close(); // Close connection
 			
 			// Print late arrival slip
-				shell_exec("lpr -o fit-to-page /home/pi/lateslip.png && echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nsuccessfully signed in, no further action required \n\n\n' | lpr");
-
+				//shell_exec("lpr -o fit-to-page /home/pi/lateslip.png && echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nsuccessfully signed in, no further action required \n\n\n' | lpr");
+				shell_exec("echo 'Name: $firstname $familyname \nForm Class: $form \nTime Signed In: $time \nJustification: $justification \nsuccessfully signed in, no further action required \n\n\n' | lpr");
 			// Redirect
 				$_SESSION = array(); // Empty session values
 				echo "<script>window.location.href='../finished.html'</script>";
