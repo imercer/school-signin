@@ -18,9 +18,9 @@ session_start();
 		$wedstartTime = mktime(21,50,0);	 	// Set wednesday start time to 21:50UTC 9:50NZST
 		$endtime = mktime(3,20,00); 			// Set end of day to 3:20UTC 15:20NZST
 	} elseif ($timeoffset == 46800) {		// If NZ daylight saving is true
-		$startTime = mktime(21,45,0);			// Set school start time to 21:45UTC 8:45NZDT
-		$wedstartTime = mktime(22,50,0);		// Set wednesday start time to 22:50UTC 9:50NZDT
-		$endtime = mktime(4,20,00);				// Set end of day to 4:20UTC 15:20NZDT
+		$startTime = mktime(19,45,0);			// Set school start time to 19:45UTC 8:45NZDT
+		$wedstartTime = mktime(20,50,0);		// Set wednesday start time to 20:50UTC 9:50NZDT
+		$endtime = mktime(2,20,00);				// Set end of day to 2:20UTC 15:20NZDT
 	}
 	
 	echo "<script>console.log('$timeoffset')</script>";
